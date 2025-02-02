@@ -15,6 +15,8 @@ docker run --rm -it -v ${PWD}:/docs squidfunk/mkdocs-material build
 # configuration
 # https://squidfunk.github.io/mkdocs-material/creating-your-site/#advanced-configuration
 
+# tutorial
+# https://squidfunk.github.io/mkdocs-material/tutorials/#blogs
 # setting-up-a-blog
 # https://squidfunk.github.io/mkdocs-material/setup/setting-up-a-blog/
 # blog

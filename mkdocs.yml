@@ -4,9 +4,5 @@ theme:
   name: material
 
 plugins:
+  - search
   - blog
-
-nav:
-  - index.md
-  - Blog:
-    - blog/index.md
