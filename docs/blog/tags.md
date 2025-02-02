@@ -2,5 +2,5 @@
 
 Following is a list of relevant tags:
 
-<!-- automatically  -->
+<!-- automatically-generated -->
 <!-- material/tags -->

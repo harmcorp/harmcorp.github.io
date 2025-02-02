@@ -2,6 +2,9 @@ site_name: HARM CORP
 site_url: https://harmcorp.github.io
 theme:
   name: material
+  icon:
+    tag:
+      rabbitmq: simple/rabbitmq
 
 plugins:
   - search
@@ -17,8 +20,3 @@ nav:
 extra:
   tags:
     Compatibility: compat
-
-theme:
-  icon:
-    tag:
-      rabbitmq: simple/rabbitmq
