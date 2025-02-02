@@ -21,4 +21,7 @@ docker run --rm -it -v ${PWD}:/docs squidfunk/mkdocs-material build
 # https://squidfunk.github.io/mkdocs-material/setup/setting-up-a-blog/
 # blog
 # https://squidfunk.github.io/mkdocs-material/plugins/blog/
+
+# tag icon
+# https://squidfunk.github.io/mkdocs-material/setup/setting-up-tags/#tag-icons-and-identifiers-tag-icon
 ```
