@@ -7,3 +7,6 @@ plugins:
   - search
   - blog
   - tags
+
+nav:
+  - Tags
