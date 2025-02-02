@@ -9,4 +9,7 @@ plugins:
   - tags
 
 nav:
-  - Tags
+  - Home: index.md
+  - Blog:
+    - blog/index.md
+    - Tags: blog/tags.md
