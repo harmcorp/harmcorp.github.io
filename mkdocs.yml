@@ -14,7 +14,7 @@ plugins:
 nav:
   # - Home: index.md
   - Blog:
-    # - blog/index.md
+    - blog/index.md
     - Tags: blog/tags.md
 
 extra:
