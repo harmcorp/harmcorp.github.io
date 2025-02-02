@@ -2,3 +2,11 @@ site_name: HARM CORP
 site_url: https://harmcorp.github.io
 theme:
   name: material
+
+plugins:
+  - blog
+
+nav:
+  - index.md
+  - Blog:
+    - blog/index.md
