@@ -1,0 +1,940 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://harmcorp.github.io/blog/2019/07/29/docker-%EA%B8%B0%EC%B4%88/">
+      
+      
+        <link rel="prev" href="../promise-%EA%B0%80-%EB%AD%90%EC%A7%80/">
+      
+      
+        <link rel="next" href="../../30/builder-pattern/">
+      
+      
+      <link rel="icon" href="../../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.2">
+    
+    
+      
+        <title>Docker 기초 - HARM CORP</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.d7758b05.min.css">
+      
+      
+
+
+  
+  
+    
+    
+      
+    
+    
+  
+  
+  <style>.md-tag.md-tag--rabbitmq{--md-tag-icon:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M23.035 9.601h-7.677a.956.956 0 0 1-.962-.962V.962a.956.956 0 0 0-.962-.956H10.56a.956.956 0 0 0-.962.956V8.64a.956.956 0 0 1-.962.962H5.762a.956.956 0 0 1-.961-.962V.962A.956.956 0 0 0 3.839 0H.959a.956.956 0 0 0-.956.962v22.076A.956.956 0 0 0 .965 24h22.07a.956.956 0 0 0 .962-.962V10.58a.956.956 0 0 0-.962-.98zm-3.86 8.152a1.437 1.437 0 0 1-1.437 1.443h-1.924a1.437 1.437 0 0 1-1.436-1.443v-1.917a1.437 1.437 0 0 1 1.436-1.443h1.924a1.437 1.437 0 0 1 1.437 1.443z"/></svg>');}</style>
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#docker-image-build" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../.." title="HARM CORP" class="md-header__button md-logo" aria-label="HARM CORP" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            HARM CORP
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Docker 기초
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../.." title="HARM CORP" class="md-nav__button md-logo" aria-label="HARM CORP" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    HARM CORP
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Blog
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            Blog
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      <a href="../../../../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    this is blog index!
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../tags/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Tags
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_3" id="__nav_1_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Archive
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_3">
+            <span class="md-nav__icon md-icon"></span>
+            Archive
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../archive/2025/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2025
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../archive/2019/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2019
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_4" id="__nav_1_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Categories
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_4">
+            <span class="md-nav__icon md-icon"></span>
+            Categories
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../category/holidays/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Holidays
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#docker-image-build" class="md-nav__link">
+    <span class="md-ellipsis">
+      docker image build
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dockerfile-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dockerfile example
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cmd-entrypoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      CMD 와 ENTRYPOINT 의 차이점
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docker-image-commit" class="md-nav__link">
+    <span class="md-ellipsis">
+      docker image commit
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docker-images-tag" class="md-nav__link">
+    <span class="md-ellipsis">
+      docker images tag
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docker-image-push" class="md-nav__link">
+    <span class="md-ellipsis">
+      docker image push
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docker-image-rmi-remove-image" class="md-nav__link">
+    <span class="md-ellipsis">
+      docker image rmi (remove image)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docker-container-runstopstartexeclogskillpsrm" class="md-nav__link">
+    <span class="md-ellipsis">
+      docker container run/stop/start/exec/logs/kill/ps/rm
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docker-volume" class="md-nav__link">
+    <span class="md-ellipsis">
+      docker volume
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docker-daemon-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      docker daemon config
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      참고
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+  <div class="md-content md-content--post" data-md-component="content">
+    <div class="md-sidebar md-sidebar--post" data-md-component="sidebar" data-md-type="navigation">
+      <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner md-post">
+          <nav class="md-nav md-nav--primary">
+            <div class="md-post__back">
+              <div class="md-nav__title md-nav__container">
+                <a href="../../../../" class="md-nav__link">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+                  <span class="md-ellipsis">
+                    Back to index
+                  </span>
+                </a>
+              </div>
+            </div>
+            
+            <ul class="md-post__meta md-nav__list">
+              <li class="md-nav__item md-nav__item--section">
+                <div class="md-post__title">
+                  <span class="md-ellipsis">
+                    Metadata
+                  </span>
+                </div>
+                <nav class="md-nav">
+                  <ul class="md-nav__list">
+                    <li class="md-nav__item">
+                      <div class="md-nav__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5z"/></svg>
+                        <time datetime="2019-07-29 00:00:00+00:00" class="md-ellipsis">July 29, 2019</time>
+                      </div>
+                    </li>
+                    
+                    
+                    
+                      
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
+                          <span class="md-ellipsis">
+                            
+                              4 min read
+                            
+                          </span>
+                        </div>
+                      </li>
+                    
+                  </ul>
+                </nav>
+              </li>
+            </ul>
+            
+          </nav>
+          
+        </div>
+      </div>
+    </div>
+    <article class="md-content__inner md-typeset">
+      
+        
+  
+
+
+  <nav class="md-tags" >
+    
+      
+      
+        
+        
+      
+      
+        <a href="../../../../tags/#tag:docker" class="md-tag md-tag-icon">docker</a>
+      
+    
+  </nav>
+
+
+
+  <h1>Docker 기초</h1>
+
+<p><img alt="많이 보던 그 그림" src="/assets/images/posts/2019-07-29-docker.jpg" /></p>
+<p><a href="https://docs.docker.com/">Docker document</a></p>
+<p><code>docker</code> vs <code>vm</code> 이라기보단 <code>container</code> vs <code>vm</code> 이라고 해야한다.
+<code>docker</code> 는 많은 <code>container</code> 기술 중 하나이다.
+<code>vm</code> 은 <code>hypervisor</code> 로 하드웨어 가상화를 한 뒤에 <code>guest OS</code> 를 올리고, 그 위에 <code>application</code> 이 필요한 <code>bins/lib</code> 가 올라 간다.</p>
+<blockquote>
+<p>따라서 격리화 수준이 높고
+ - 보안 수준이 높다. (하나의 vm 이 뚫려도 host 는 안전하다.)
+ - 완전 다른 os 를 올릴 수 있다.</p>
+<p>application 까지 io 처리를 하기 위한 커널단계가 많다.
+  - 느리다</p>
+</blockquote>
+<p><code>application</code> 마다 <code>guest OS</code> 가 필요하기 때문에 용량이 크다. &gt;&gt; 배포시 고려요소</p>
+<blockquote>
+<p><code>docker</code> 를 알게된지 얼마 안됐지만, 몇달마다 문서가 바뀌는걸 보니 좀 당황스럽다..
+설치 방법도 써놓으려고 했는데 문서가 자꾸 바뀌네 ㅠㅠ
+<code>docker</code> group 에 <code>linux user</code> 를 추가해야 <code>root</code> 권한 없이 <code>docker</code> 를 실행할 수 있다.</p>
+</blockquote>
+<p>docker 의 Images, containers, volumes, or customized configuration files 들이 저장되는 장소</p>
+<pre><code>/var/lib/docker
+</code></pre>
+<h2 id="docker-image-build">docker image build</h2>
+<p><code>docker file</code> 로 <code>docker images</code> 를 만든다.</p>
+<pre><code class="language-shell">$ docker build -t [REPO/IMAGE_NAME]:[IMAGE_TAG] [DOCKER FILE LOCATION]
+$ docker build -t [REPO/IMAGE_NAME]:[IMAGE_TAG] (-f [DOCKER FILE NAME]) [DOCKER FILE LOCATION]
+
+#-t : tag
+$ docker build -t test-redis:0.1 .
+
+#-f : docker&quot;f&quot;ile
+#--cidfile=&quot;container_id_file_path&quot; : write container id to file
+$ docker build -t was:0.1 .
+$ docker build -t was:0.2 -f DockerfileForWas02 .
+</code></pre>
+<h2 id="dockerfile-example">Dockerfile example</h2>
+<pre><code>FROM alpine:3.10
+
+LABEL maintainer=&quot;herdin86@gmail.com&quot;
+
+RUN apk add git
+RUN apk add openjdk11
+RUN mkdir /msa
+COPY ./build/libs/GradleSpringBootMybatis-1.0-SNAPSHOT.jar /msa
+
+CMD [&quot;java&quot;, &quot;-jar&quot;, &quot;/msa/GradleSpringBootMybatis-1.0-SNAPSHOT.jar&quot;]
+</code></pre>
+<ul>
+<li>FROM: 도커 파일을 만들 베이스이미지를 지정한다.</li>
+<li>LABEL</li>
+<li>RUN</li>
+<li>ADD</li>
+<li>COPY</li>
+<li>
+<p>ADD 와 COPY 의 차이점</p>
+<ul>
+<li>URL을 복사할 source로 사용할 수 있다. remote에 있는 파일을 받아서 복사하게 된다.</li>
+<li>source 파일이 gzip과 같이 일반적으로 잘 알려진 압축형태인 경우, 압축을 풀어준다.</li>
+<li>압축된 remote 파일인 경우, 압축을 풀어주지는 않는다.</li>
+<li>ADD 보다 RUN 으로 작업을 할 경우, 더 명시적이고 이미지가 더 작아진다고한다.<blockquote>
+<p>ADD 대신 COPY 와 RUN 을 사용하자.</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li>
+<p>출처</p>
+<ul>
+<li><a href="https://nickjanetakis.com/blog/docker-tip-2-the-difference-between-copy-and-add-in-a-dockerile">Docker Tip #2: The Difference between COPY and ADD in a Dockerfile</a></li>
+<li><a href="https://blog.leocat.kr/notes/2017/01/07/docker-add-vs-copy">[Docker] ADD vs COPY in Dockerfile</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="cmd-entrypoint">CMD 와 ENTRYPOINT 의 차이점</h2>
+<p>ENTRYPOINT 의 명령어는 변경되지 않는다.
+CMD 는 컨테이너 생성 시 명령어를 변경할 수 있다.</p>
+<pre><code class="language-shell"># 아래와 같은 두 파일이 있을 경우,
+cat &lt;&lt;EOF &gt; DockerfileCMD
+FROM alpine
+CMD [&quot;echo&quot;, &quot;hello, cmd&quot;]
+EOF
+
+cat &lt;&lt;EOF &gt; DockerfileENTRY
+FROM alpine
+ENTRYPOINT [&quot;echo&quot;, &quot;hello, entrypoint&quot;]
+EOF
+
+# 이미지 생성
+$ docker build -t test:cmd -f DockerfileCMD .
+$ docker build -t test:entry -f DockerfileENTRY .
+
+# 실행
+$ docker run --name test-cmd test:cmd echo wow
+$ docker run --name test-entry test:entry echo wow
+# 재실행
+$ docker start test-cmd
+$ docker start test-entry
+
+$ docker logs test-cmd
+wow
+wow
+
+$ docker logs test-entry
+hello, entrypoint echo wow
+hello, entrypoint echo wow
+</code></pre>
+<h2 id="docker-image-commit">docker image commit</h2>
+<p><code>container</code> 로 부터 <code>images</code> 를 만든다.</p>
+<pre><code class="language-shell">$ docker commit (-a &quot;[AUTHOR_INFO]&quot;) (-c &quot;[COMMENT]&quot;) [CONTAINER_ID/NAME] [REPO/IMAGE_NAME]:[IMAGE_TAG]
+
+$ docker commit -a &quot;epu baal &lt;herdin86@gmail.com&gt;&quot; -c &quot;new images&quot; devwas02 newdevwas:0.1
+</code></pre>
+<h2 id="docker-images-tag">docker images tag</h2>
+<p><code>remote repository</code> 에서 사용할 <code>tag</code> 를 저장한다.</p>
+<pre><code class="language-shell">$ docker tag [DOCKER_IMAGE_NAME]:[IMAGE_VERSION] [IMAGE_REPOSITORY_URL]:[IMAGE_VERSION_IN_REPOSITORY]
+
+$ docker tag web:0.1 123456789012.dkr.ecr.ap-northeast-2.amazonaws.com/myweb01:0.1
+</code></pre>
+<h2 id="docker-image-push">docker image push</h2>
+<p><code>remote repository</code> 로 <code>image</code> 를 전송한다.</p>
+<pre><code class="language-shell">$ docker push [IMAGE_REPOSITORY_URL]:[IMAGE_VERSION_IN_REPOSITORY]
+
+$ docker push 546552822736.dkr.ecr.ap-northeast-2.amazonaws.com/herdinecr01:0.1
+</code></pre>
+<h2 id="docker-image-rmi-remove-image">docker image rmi (remove image)</h2>
+<p><code>docker images</code> 를 삭제한다.</p>
+<pre><code class="language-shell">$ docker rmi [REPO/IMAGE_NAME]:[IMAGE_TAG] #remove image
+
+$ docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+elevator            0.4                 0f06f1b3604e        About an hour ago   885MB
+elevator            0.3                 d0e16464a89f        10 days ago         874MB
+elevator            0.2                 367e2c8e5b19        10 days ago         873MB
+elevator            0.1                 6bc1755dfb94        10 days ago         874MB
+alpine              latest              b7b28af77ffe        4 weeks ago         5.58MB
+redis               4-alpine            8ce91e22cd3f        3 months ago        35.5MB
+vault               1.1.2               8a23297b2305        3 months ago        108MB
+centos              latest              9f38484d220f        4 months ago        202MB
+golang              1.10                6fd1f7edb6ab        6 months ago        760MB
+$ docker rmi centos:latest #delete with image-name:tag
+Untagged: centos:latest
+Untagged: centos@sha256:a799dd8a2ded4a83484bbae769d97655392b3f86533ceb7dd96bbac929809f3c
+Deleted: sha256:9f38484d220fa527b1fb19747638497179500a1bed8bf0498eb788229229e6e1
+Deleted: sha256:d69483a6face4499acb974449d1303591fcbb5cdce5420f36f8a6607bda11854
+
+$ docker rmi b7b28af77ffe #delete with image-id
+Untagged: alpine:latest
+Untagged: alpine@sha256:6a92cd1fcdc8d8cdec60f33dda4db2cb1fcdcacf3410a8e05b3741f44a9b5998
+Deleted: sha256:b7b28af77ffec6054d13378df4fdf02725830086c7444d9c278af25312aa39b9
+Deleted: sha256:1bfeebd65323b8ddf5bd6a51cc7097b72788bc982e9ab3280d53d3c613adffa7
+</code></pre>
+<h2 id="docker-container-runstopstartexeclogskillpsrm">docker container run/stop/start/exec/logs/kill/ps/rm</h2>
+<pre><code class="language-shell">docker run [REPO/IMAGE_NAME]:[IMAGES_TAG]
+#-d : detach mode, deamonize
+#-p [HOST PORT]:[CONTAINER PORT]: port mapping -&gt; old syntax
+#--publish published=[HOST PORT],target=[CONTAINER PORT] -&gt; new syntax
+#--name : container name
+#--restart=no/on-failure[:max-retries]/always/unless-stopped : restart policy
+#--cap-add : Add Linux capabilities
+#ex) docker run -d -p 8081:8080 --name was01 was:0.1
+</code></pre>
+<p><code>--cap-add</code> : 컨테이너에서 cgroups의 특정 Capability를 사용합니다. ALL을 지정하면 모든 Capability 를 사용합니다. <a href="http://pyrasis.com/book/DockerForTheReallyImpatient/Chapter20/28">출처</a><br />
+여기서 모든 Capability 는 <a href="https://linux.die.net/man/7/capabilities">여기서</a> 볼 수 있다.  </p>
+<blockquote>
+<p>그럼 Capability 는 뭘까? ㅠㅠ ㅎ그흑 <a href="https://access.redhat.com/documentation/ko-kr/red_hat_enterprise_linux/6/html/resource_management_guide/ch01">참고</a></p>
+</blockquote>
+<pre><code class="language-shell">docker ps
+#-a : all, default
+#-f : filter : status=exited/running, status=exited/running/...
+
+docker start [CONTAINER_ID/ID_PREFIX/NAME]
+docker logs [CONTAINER_ID/ID_PREFIX/NAME]
+docker stop [CONTAINER_ID/ID_PREFIX/NAME] #send stop signal
+docker kill [CONTAINER_ID/ID_PREFIX/NAME]
+docker rm [CONTAINER_ID/ID_PREFIX/NAME]
+
+docker exec -it [CONTAINER_NAME] [COMMANDS..]
+#ex) docker exec -it was01 /bin/bash
+</code></pre>
+<h2 id="docker-volume">docker volume</h2>
+<p><code>docker</code> 에서 사용하는 <code>volume</code> 관련된 명령어들.</p>
+<pre><code class="language-shell">docker volume ls #volume list
+docker volume inspect [DOCKER_VOLUME_NAME]
+docker volume rm $(docker volume ls -f dangling=true -q) #remove dangling volume
+#or using 1.13.x
+docker volume prune #remove dangling volume
+</code></pre>
+<h2 id="docker-daemon-config">docker daemon config</h2>
+<ul>
+<li>docker 는 container 에서 stdout 으로 나오는 출력을 특정 위치 <code>/var/lib/docker/containers/{containerID}</code> 에 파일로 쌓는다</li>
+<li>기본으로 logrotate 를 하지 않는다!</li>
+<li>기본 config 위치: <code>/etc/docker/daemon.json</code></li>
+<li>다른 config 위치를 사용하고싶다면 dockerd 명령어로 --config-file 옵션을 줘야하는듯?</li>
+</ul>
+<pre><code class="language-bash"># validate config file
+$ dockerd --validate --config-file=/tmp/valid-config.json
+
+
+$ cat &lt;&lt;EOF &gt; daemon.json
+{
+  &quot;log-driver&quot;: &quot;json-file&quot;,
+  &quot;log-opts&quot;: {
+    &quot;max-size&quot;: &quot;1m&quot;,
+    &quot;max-file&quot;: &quot;3&quot;
+  }
+}
+EOF
+
+</code></pre>
+<h2 id="_1">참고</h2>
+<ul>
+<li><a href="https://www.44bits.io/ko/post/how-docker-image-work">만들면서 이해하는 도커(Docker) 이미지의 구조</a></li>
+<li><a href="https://docs.docker.com/engine/logging/configure/#configure-the-default-logging-driver">Configure the default logging driver</a></li>
+<li><a href="https://docs.docker.com/reference/cli/dockerd/#daemon-configuration-file">Daemon configuration file</a></li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+  
+
+
+
+      
+    </article>
+  </div>
+
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../../../..", "features": [], "search": "../../../../../assets/javascripts/workers/search.f8cc74c7.min.js", "tags": {"Compatibility": "compat", "rabbitmq": "rabbitmq"}, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../../../assets/javascripts/bundle.f13b1293.min.js"></script>
+      
+    
+  </body>
+</html>

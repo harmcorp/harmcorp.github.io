@@ -1,0 +1,938 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://harmcorp.github.io/blog/2019/07/25/git-rebase/">
+      
+      
+        <link rel="prev" href="../git-reset/">
+      
+      
+        <link rel="next" href="../scss-%EA%B0%80-%EB%AD%90%EC%A7%80/">
+      
+      
+      <link rel="icon" href="../../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.2">
+    
+    
+      
+        <title>Git Rebase - HARM CORP</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.d7758b05.min.css">
+      
+      
+
+
+  
+  
+    
+    
+      
+    
+    
+  
+  
+  <style>.md-tag.md-tag--rabbitmq{--md-tag-icon:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M23.035 9.601h-7.677a.956.956 0 0 1-.962-.962V.962a.956.956 0 0 0-.962-.956H10.56a.956.956 0 0 0-.962.956V8.64a.956.956 0 0 1-.962.962H5.762a.956.956 0 0 1-.961-.962V.962A.956.956 0 0 0 3.839 0H.959a.956.956 0 0 0-.956.962v22.076A.956.956 0 0 0 .965 24h22.07a.956.956 0 0 0 .962-.962V10.58a.956.956 0 0 0-.962-.98zm-3.86 8.152a1.437 1.437 0 0 1-1.437 1.443h-1.924a1.437 1.437 0 0 1-1.436-1.443v-1.917a1.437 1.437 0 0 1 1.436-1.443h1.924a1.437 1.437 0 0 1 1.437 1.443z"/></svg>');}</style>
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../.." title="HARM CORP" class="md-header__button md-logo" aria-label="HARM CORP" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            HARM CORP
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Git Rebase
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../.." title="HARM CORP" class="md-nav__button md-logo" aria-label="HARM CORP" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    HARM CORP
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Blog
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            Blog
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      <a href="../../../../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    this is blog index!
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../tags/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Tags
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_3" id="__nav_1_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Archive
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_3">
+            <span class="md-nav__icon md-icon"></span>
+            Archive
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../archive/2025/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2025
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../archive/2019/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2019
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_4" id="__nav_1_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Categories
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_4">
+            <span class="md-nav__icon md-icon"></span>
+            Categories
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../category/holidays/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Holidays
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#rebase-squash" class="md-nav__link">
+    <span class="md-ellipsis">
+      rebase 를 사용해서 커밋을 합치고(squash) 싶다.
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+  <div class="md-content md-content--post" data-md-component="content">
+    <div class="md-sidebar md-sidebar--post" data-md-component="sidebar" data-md-type="navigation">
+      <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner md-post">
+          <nav class="md-nav md-nav--primary">
+            <div class="md-post__back">
+              <div class="md-nav__title md-nav__container">
+                <a href="../../../../" class="md-nav__link">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+                  <span class="md-ellipsis">
+                    Back to index
+                  </span>
+                </a>
+              </div>
+            </div>
+            
+            <ul class="md-post__meta md-nav__list">
+              <li class="md-nav__item md-nav__item--section">
+                <div class="md-post__title">
+                  <span class="md-ellipsis">
+                    Metadata
+                  </span>
+                </div>
+                <nav class="md-nav">
+                  <ul class="md-nav__list">
+                    <li class="md-nav__item">
+                      <div class="md-nav__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5z"/></svg>
+                        <time datetime="2019-07-25 00:00:00+00:00" class="md-ellipsis">July 25, 2019</time>
+                      </div>
+                    </li>
+                    
+                    
+                    
+                      
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
+                          <span class="md-ellipsis">
+                            
+                              5 min read
+                            
+                          </span>
+                        </div>
+                      </li>
+                    
+                  </ul>
+                </nav>
+              </li>
+            </ul>
+            
+          </nav>
+          
+        </div>
+      </div>
+    </div>
+    <article class="md-content__inner md-typeset">
+      
+        
+  
+
+
+  <nav class="md-tags" >
+    
+      
+      
+        
+        
+      
+      
+        <a href="../../../../tags/#tag:git" class="md-tag md-tag-icon">git</a>
+      
+    
+  </nav>
+
+
+
+<h1 id="_1">빠른사용</h1>
+<p>자세한 설명은 아래쪽에..</p>
+<h2 id="rebase-squash">rebase 를 사용해서 커밋을 합치고(squash) 싶다.</h2>
+<p>현재 상황 develop-temp branch 에서 작업중인데, 작업했던 것을 다 합치고 싶다.</p>
+<pre><code class="language-shell">$ git log --oneline -5
+13e4685 (HEAD -&gt; develop-temp) add 1, 1, 2, 3
+99285be add c
+935b826 done code01
+0222a9e (origin/develop, test, develop) done code01
+fa30853 code01 dev..
+</code></pre>
+<p><code>-i</code> interactive 모드 와 <code>HEAD~3</code>  HEAD 를 포함한 3개까지의 commit 을 합친다.</p>
+<pre><code class="language-shell">$ git rebase -i HEAD~3
+</code></pre>
+<p>그럼 편집기가 열리면서 요딴식으로 나오는데..</p>
+<pre><code class="language-shell">pick 935b826 done code01
+pick 99285be add c
+pick 13e4685 add 1, 1, 2, 3
+
+</code></pre>
+<p>그걸 아래와 같이 고친다. squash 는 이전 commit 에 이후 commit 을 녹이는 작업이다. 그래서 이전 commit 이 없으면 안된다.<br />
+pick -&gt; s 로 고침. s 는 squash 를 의미. 저렇게 고치고나서 <code>:wq</code> 로 저장 후 나가면..</p>
+<blockquote>
+<p>squash <commit> = use commit, but meld into previous commit</p>
+</blockquote>
+<p>``` # 커밋 3개가 섞인 결과입니다.</p>
+<h1 id="1">1번째 커밋 메시지입니다:</h1>
+<p>done code01, add c, d, 1, 1, 2, 3</p>
+<h1 id="2">커밋 메시지 #2번입니다:</h1>
+<h1 id="3">커밋 메시지 #3번입니다:</h1>
+<p>shell
+pick 935b826 done code01
+s 99285be add c
+s 13e4685 add 1, 1, 2, 3</p>
+<pre><code>
+로그를 어떻게 수정할 건지 물어보는 편집기가 또 열린다.
+
+``` shell
+# 커밋 3개가 섞인 결과입니다.
+# 1번째 커밋 메시지입니다:
+
+done code01
+
+1
+
+2
+
+# 커밋 메시지 #2번입니다:
+
+add c
+
+add d
+
+# 커밋 메시지 #3번입니다:
+
+add 1, 1, 2, 3
+
+
+</code></pre>
+<p>잘고쳐준 뒤, 마찬가지로 <code>:wq</code> 로 저장 후 종료하면..</p>
+<pre><code class="language-shell"># 커밋 3개가 섞인 결과입니다.
+# 1번째 커밋 메시지입니다:
+
+done code01, add c, d, 1, 1, 2, 3
+
+# 커밋 메시지 #2번입니다:
+
+
+
+# 커밋 메시지 #3번입니다:
+
+
+
+</code></pre>
+<p>합쳐진것을 확인할 수 있다.</p>
+<pre><code class="language-shell">git log --oneline -5
+0032bd9 (HEAD -&gt; develop-temp) done code01, add c, d, 1, 1, 2, 3
+0222a9e (origin/develop, test, develop) done code01
+fa30853 code01 dev..
+</code></pre>
+<h2 id="rebase">rebase 를 사용해 커밋 메세지를 수정하고 싶다.</h2>
+<p>현재 상황.. done code01, add c, d, 1, 1, 2, 3 -&gt; 이 커밋 내용을 심플하게 done! 으로 바꾸고싶다.</p>
+<pre><code class="language-shell">$ git log --oneline -5
+0032bd9 (HEAD -&gt; develop-temp) done code01, add c, d, 1, 1, 2, 3
+0222a9e (origin/develop, test, develop) done code01
+fa30853 code01 dev..
+</code></pre>
+<p>커밋 메세지만 수정할거니까.. <code>-i</code> interactive 모드 와 <code>HEAD~1</code>  HEAD 를 포함한 1개의 commit 을 수정한다.</p>
+<pre><code class="language-shell">$ git rebase -i HEAD~1
+</code></pre>
+<p>그럼 아래와 같이 편집기가 열린다.</p>
+<pre><code class="language-shell">pick 0032bd9 done code01, add c, d, 1, 1, 2, 3
+</code></pre>
+<p><code>r</code> reword 로 마킹하고 <code>:wq</code> 로 저장 후 종료하면..</p>
+<pre><code class="language-shell">r 0032bd9 done code01, add c, d, 1, 1, 2, 3
+</code></pre>
+<p>마찬가지로 커밋 메세지를 수정할 수 있는 편집기가 열린다.</p>
+<pre><code class="language-shell">done code01, add c, d, 1, 1, 2, 3 
+</code></pre>
+<p>done! 으로 수정한 뒤, <code>:wq</code> 저장 후 종료한뒤, 확인해보자.</p>
+<pre><code class="language-shell">$ git log --oneline -5
+d34433f (HEAD -&gt; develop-temp) done!
+0222a9e (origin/develop, test, develop) done code01
+fa30853 code01 dev..
+</code></pre>
+<hr />
+<h1 id="rebase_1"><code>rebase</code></h1>
+<p>~~이미 커밋한 히스토리를 수정할 떄 사용한다.~~ 완전 잘못 이해했었음.</p>
+<p>branch 의 parent 를 변경할 떄 사용.</p>
+<p>히스토리를 수정하거나 커밋을 합치는것은 부가적인 기능이다.</p>
+<pre><code class="language-shell">$ git checkout -b feature-a
+$ .... working....
+# feature-a branch 의 부모를 master 로 변경한다. 
+$ git rebase master
+</code></pre>
+<h2 id="-i-interactive"><code>-i</code>, <code>--interactive</code></h2>
+<p>대화형으로 rebase 실행한다.</p>
+<p>대화형으로 커밋을 수정할때, 아래와 같은 방법들이 있다.</p>
+<h3 id="pick-p">pick, p</h3>
+<p>커밋 순서를 변경한다.</p>
+<p>현재 커밋상태</p>
+<pre><code class="language-shell">$ git log --oneline
+ab1b2e7 (HEAD -&gt; feature-03) feature33
+61840bc feature32
+4b6dff3 feature31
+b71edbe feature03
+511a2a0 feature03
+a165c9b feature3
+07cfb82 fix bug3
+dd2c2a5 Merge branch 'master' into develop
+53299fd (master) hotfix1-1,1-2,1-3,1,1-2
+888c443 fix bug1
+b053989 fix bug02
+2ca8e8b fix bug01
+c12791f (origin/master) add main
+</code></pre>
+<p>commit feature32 와 feature33 의 커밋 순서를 바꿔본다.<br />
+에디팅 모드에서 단순하게 커밋위치를 변경하면된다.</p>
+<pre><code class="language-shell">$ git rebase -i HEAD~4
+
+pick b71edbe feature03
+pick 4b6dff3 feature31
+pick ab1b2e7 feature33
+pick 61840bc feature32
+</code></pre>
+<p>확인해보면,</p>
+<pre><code class="language-shell">$ git log --oneline
+92efb5b (HEAD -&gt; feature-03) feature32
+03b4863 feature33
+4b6dff3 feature31
+b71edbe feature03
+511a2a0 feature03
+a165c9b feature3
+07cfb82 fix bug3
+dd2c2a5 Merge branch 'master' into develop
+53299fd (master) hotfix1-1,1-2,1-3,1,1-2
+888c443 fix bug1
+b053989 fix bug02
+2ca8e8b fix bug01
+c12791f (origin/master) add main
+</code></pre>
+<h3 id="reword-r">reword, r</h3>
+<p>커밋 메세지를 변경한다.</p>
+<p>현재 커밋상태</p>
+<pre><code class="language-shell">$ git log --oneline --graph
+* e810ee0 (HEAD -&gt; master) hotfix1-3
+* f1e5097 hotfix1-2
+* 050139b hotfix1-1
+* c12791f (origin/master) add main
+</code></pre>
+<p>그냥 <code>git rebase</code> 를 입력하면 커밋을 순서대로 보여준다.</p>
+<pre><code class="language-shell">$ git rebase
+First, rewinding head to replay your work on top of it...
+Applying: hotfix1-1
+Applying: hotfix1-2
+Applying: hotfix1-3
+</code></pre>
+<p><code>git rebase -i</code> 옵션으로 실행하면 에디터 창이 뜬다.
+<code>git rebase -i HEAD~2</code> HEAD 포함하여 2개의 커밋을 대상으로 한다.</p>
+<pre><code class="language-shell">$ git rebase -i
+
+pick 050139b hotfix1-1
+pick f1e5097 hotfix1-2
+pick e810ee0 hotfix1-3
+
+# Rebase c12791f..e810ee0 onto c12791f (3 commands)
+#
+# Commands:
+# p, pick &lt;commit&gt; = use commit
+# r, reword &lt;commit&gt; = use commit, but edit the commit message
+# e, edit &lt;commit&gt; = use commit, but stop for amending
+# s, squash &lt;commit&gt; = use commit, but meld into previous commit
+# f, fixup &lt;commit&gt; = like &quot;squash&quot;, but discard this commit's log message
+# x, exec &lt;command&gt; = run command (the rest of the line) using shell
+# b, break = stop here (continue rebase later with 'git rebase --continue')
+# d, drop &lt;commit&gt; = remove commit
+# l, label &lt;label&gt; = label current HEAD with a name
+# t, reset &lt;label&gt; = reset HEAD to a label
+# m, merge [-C &lt;commit&gt; | -c &lt;commit&gt;] &lt;label&gt; [# &lt;oneline&gt;]
+# .       create a merge commit using the original merge commit's
+# .       message (or the oneline, if no original merge commit was
+# .       specified). Use -c &lt;commit&gt; to reword the commit message.
+#
+# These lines can be re-ordered; they are executed from top to bottom.
+#
+# If you remove a line here THAT COMMIT WILL BE LOST.
+#
+# However, if you remove everything, the rebase will be aborted.
+#
+# Note that empty commits are commented out
+</code></pre>
+<p>기본적으로 <code>pick</code> 커맨드가 적용이 되어있다. 따라서 그냥 <code>:wq</code>  하면 아무런 변경사항 없이 종료된다.</p>
+<pre><code class="language-shell">pick 050139b hotfix1-1
+reword f1e5097 hotfix1-2
+pick e810ee0 hotfix1-3
+</code></pre>
+<p><code>r</code> 또는 <code>reword</code> 커맨드를 사용하면(에디팅 모드에서 pick 으로 되어있는 것을 지우고, r 또는 reword 를 입력하고, :wq 로 저장하고 나가면) 커밋 메세지를 수정할 수 있는 에디터가 열린다.</p>
+<pre><code class="language-shell">hotfix1-2-mod-from-rebase
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# date:
+  created:      Tue Jul 9 20:50:06 2019 +0900
+#
+# interactive rebase in progress; onto c12791f
+# Last commands done (2 commands done):
+#    pick 050139b hotfix1-1
+#    reword f1e5097 hotfix1-2
+# Next command to do (1 remaining command):
+#    pick e810ee0 hotfix1-3
+# You are currently editing a commit while rebasing branch 'master' on 'c12791f'.
+#
+# Changes to be committed:
+#       modified:   hotfix-01
+</code></pre>
+<p>수정한뒤, <code>hotfix1-2</code> -&gt; <code>hotfix1-2-mod-from-rebase</code> <code>:wq</code> 로 저장후 종료하면</p>
+<pre><code class="language-shell">$ git log --oneline --graph
+* 91db62d (HEAD -&gt; master) hotfix1-3
+* 1159e30 hotfix1-2-mod-from-rebase
+* 050139b hotfix1-1
+* c12791f (origin/master) add main
+</code></pre>
+<p>커밋 메세지가 변경된다.</p>
+<h1 id="squash">squash</h1>
+<p>커밋을 합친다.</p>
+<p>현재 커밋 상태.</p>
+<p><code>hotfix-1</code> 에서 수정을 여러번 했고 그게 그대로 <code>master</code> 에 편입되어 메세지가 더러운 상태다.</p>
+<blockquote>
+<p>master 에서 hotfix-1 hotfix-2 hotfix-3 중에서 hotfix-1 이 merge 되었고,
+rebase 로 커밋메세지를 변경한다음 hotfix-1 에서 추가 수정을 한 뒤,
+또 merge 하니까 이런 모양새가 되었다.</p>
+</blockquote>
+<pre><code class="language-shell">$ git log --oneline --graph
+*   8386aa9 (HEAD -&gt; master, hotfix-3, hotfix-2) Merge branch 'hotfix-1'
+|\
+| * 2794231 hotfix1-2
+| * ba77a63 hotfix1
+| * fc03e1e hotfix1
+| * acd1ed5 hotfix1
+* | 91db62d hotfix1-3
+* | 1159e30 hotfix1-2-mod-from-rebase
+* | 050139b hotfix1-1
+|/
+* c12791f (origin/master) add main
+</code></pre>
+<p>쫙 다 합쳐보겠다.</p>
+<pre><code class="language-shell">$ git rebase -i
+
+p 050139b hotfix1-1
+squash 1159e30 hotfix1-2-mod-from-rebase
+s 91db62d hotfix1-3
+s acd1ed5 hotfix1
+s fc03e1e hotfix1
+s ba77a63 hotfix1
+s 2794231 hotfix1-2
+</code></pre>
+<pre><code class="language-shell">$ git log --oneline --graph
+* 53299fd (HEAD -&gt; master) hotfix1-1,1-2,1-3,1,1-2
+* c12791f (origin/master) add main
+</code></pre>
+<h1 id="-abort">--abort</h1>
+<p>현재 rebase 상태를 취소한다.</p>
+<h1 id="conflict">conflict 가 났을때</h1>
+<h2 id="_2">직접 수정하기</h2>
+<pre><code class="language-shell"># 직접 파일에가서 conflict 를 수정한뒤, status 로 conflict 파일을 확인하여 add 한다
+$ git status
+$ git add {conflict resolved file}
+$ git rebase --continue
+</code></pre>
+<h2 id="_3">내것/남에것으로 엎어치기</h2>
+<p>rebase conflict 가 나면, git status 를 했을 때, conflict 된 파일이 stage 에 들어가지 않게 된다.</p>
+<p>해당 파일을 수정하고 stage 로 넣은 뒤, 메세지에 나온대로 <code>git rebase --continue</code> 로 rebase 를 완료하면 된다.</p>
+<p>conflict 난 파일을 수정할 때,</p>
+<p>내가 branch 이고, master 를 기준으로 rebase 할때 참고
+* <code>git checkout --ours &lt;FILE-NAME&gt;</code> master 수정본을 사용하여 덮어쓰기
+* <code>git checkout --theirs &lt;FILE-NAME&gt;</code> branch 수정본을 사용하여 덮어쓰기</p>
+<hr />
+<h1 id="_4">참고</h1>
+<ul>
+<li><a href="https://git-scm.com/book/ko/v2/Git-%EB%B8%8C%EB%9E%9C%EC%B9%98-Rebase-%ED%95%98%EA%B8%B0">3.6 Git 브랜치 - Rebase 하기</a></li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+  
+
+
+
+      
+    </article>
+  </div>
+
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../../../..", "features": [], "search": "../../../../../assets/javascripts/workers/search.f8cc74c7.min.js", "tags": {"Compatibility": "compat", "rabbitmq": "rabbitmq"}, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../../../assets/javascripts/bundle.f13b1293.min.js"></script>
+      
+    
+  </body>
+</html>
