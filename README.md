@@ -25,3 +25,25 @@ docker run --rm -it -v ${PWD}:/docs squidfunk/mkdocs-material build
 # tag icon
 # https://squidfunk.github.io/mkdocs-material/setup/setting-up-tags/#tag-icons-and-identifiers-tag-icon
 ```
+
+# migration jekyll to mkdoc
+
+``` shell
+# in search 
+
+# file to include:
+docs/blog/posts/2019
+# search:
+layout:.*
+# replace
+# none
+
+# search:
+date: (.*)
+# replace
+date:
+  created: $1
+
+
+
+```
